@@ -36,6 +36,8 @@ def check_A(st):
     return st.count("A")
 
 def check_path(st):
+    if not '/' in st:
+        return "Wrong input"
     st=st.split('/')
     return st[-1].split('.')[0]
 
@@ -78,7 +80,7 @@ def sortwordlen():
     mst.sort(key=lambda x:len(x.split(' ')))
     return mst
 
-def sortwordlen():
+def sortascii():
     mst=[]
     st=input('Enter strings type exit when finished: ')
     while st!="exit":
@@ -114,22 +116,45 @@ def sortqlen():
         st=input('Enter strings type exit when finished: ')
   
     return sort_by_quadratic_deviation(mst)
+def sortqlentrip():
+    def get_mirror_triples(s):
+        count = []
+       
+        for i in range(len(s) - 2):
+            if s[i] == s[i + 2]:
+                count.append([s[i]+s[i+1]+s[i+2]])
+        return max([average_ascii_value(x) for x in count])/len(count)
+
+    def average_ascii_value(s):    
+        return sum(ord(char) for char in s) / len(s)
+
+    def quadratic_deviation(val1, val2):   
+        return (val1 - val2) ** 2
+    def sort_by_magic(strings):     
+        sorted_strings = sorted(strings, key=lambda s: quadratic_deviation(average_ascii_value(s),get_mirror_triples(s)))
+        return sorted_strings
+    mst=[]
+    st=input('Enter strings type exit when finished: ')
+    while st!="exit":
+        mst.append(st)
+        st=input('Enter strings type exit when finished: ')
+  
+    return sort_by_magic(mst)
 
 def sorttriplen():
     def count_mirror_triples(s):
         count = 0
-        # Ищем тройки с зеркальной структурой: первый и третий символы одинаковы
+       
         for i in range(len(s) - 2):
             if s[i] == s[i + 2]:
                 count += 1
         return count
 
     def sort_by_mirror_triples(strings):
-        # Сортируем строки по количеству зеркальных троек
+     
         sorted_strings = sorted(strings, key=lambda s: count_mirror_triples(s))
         return sorted_strings
 
-    # Пример использования
     mst=[]
     st=input('Enter strings type exit when finished: ')
     while st!="exit":
@@ -170,7 +195,7 @@ def locmax(arr):
     if n > 1 and arr[n - 1] > arr[n - 2]:
         count += 1 
 
-    # Проверка внутренних элементов
+
     for i in range(1, n - 1):
         if arr[i] > arr[i - 1] and arr[i] > arr[i + 1]:
             count += 1
@@ -191,7 +216,7 @@ def chered(arr):
         if current_is_int == is_int:
             return False
 
-        # Обновляем флаг типа для следующей итерации
+        
         is_int = current_is_int
 
     return True
@@ -208,3 +233,48 @@ def last(arr):
     srar_prime=sum(primes)/len(primes)
     ans=[x for x in arr if not is_prime(x) and x>srar_prime]
     return sum(ans)/len(ans)
+
+
+
+if __name__=="__main__":
+    number=int(input('Enter taskNumber: '))
+    if number==1:
+        x=int(input('Enter the number: '))
+        print(coprimes_amount(x))
+        print(sum_of_d(x))
+        print(divisor_copr_w_dig(x))
+    elif number==2:
+        x=(input('Enter the string: '))
+        print(check_sort(x))
+        print(check_A(x))
+        print(check_path(x))
+    elif number==5:
+        x=(input('Enter the string: '))
+        print(reg(x))
+    elif number==6:
+        x=(input('Enter the string: '))
+        print(check_low(x))
+        print(check_amount(x))
+        print(check_path(x))
+    elif number==9:
+        print(sortlen())
+    elif number==10:
+        print(sortwordlen())
+    elif number==11:
+        print(sortascii())
+        print(sortqlentrip())
+        print(sortqlen())
+        print(sorttriplen())
+    elif number==15:
+        st=input('Enter array: ').split(' ')
+        x=[int(y) for y in st if '.' not in y]
+        print(indexes(x))
+        print(lost(x))
+        print(locmax(x))       
+        
+        xi=[int(z) for z in st if '.' not in z]
+        xf=[float(z) for z in st if '.'  in z]
+        x=xi+xf
+        print(x)
+        print(chered(x))
+        print(last(x))
