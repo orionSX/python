@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import ttk
 import math
-import random
+
 import numpy
 
 
@@ -40,51 +40,50 @@ def normal_distribution(N, mu, sigma):
     return normal_sample[:N]
 
 
-# Функция для вычисления математического ожидания и дисперсии
+
 def calculate_statistics(sample):
     mean = sum(sample) / len(sample)
     variance = sum((x - mean) ** 2 for x in sample) / len(sample)
     return mean, variance
 
-# Функция для расчета относительной погрешности
 def relative_error(estimated_value, true_value):
     return abs((estimated_value - true_value) / true_value) * 100
 
-# Функция для построения графиков погрешностей
+
 def plot_error_graphs(uniform_errors, exp_errors, norm_errors, sample_sizes):
     fig, axs = plt.subplots(2, 3, figsize=(18, 12))
 
-    # График погрешности математического ожидания для равномерного распределения
+ 
     axs[0, 0].plot(sample_sizes, uniform_errors['mean'], marker='o', label='Mean Error')
     axs[0, 0].set_title('Равномерное распределение - Погрешность мат. ожидания')
     axs[0, 0].set_xlabel('Размер выборки')
     axs[0, 0].set_ylabel('Относительная погрешность (%)')
 
-    # График погрешности дисперсии для равномерного распределения
+   
     axs[1, 0].plot(sample_sizes, uniform_errors['var'], marker='o', label='Variance Error')
     axs[1, 0].set_title('Равномерное распределение - Погрешность дисперсии')
     axs[1, 0].set_xlabel('Размер выборки')
     axs[1, 0].set_ylabel('Относительная погрешность (%)')
 
-    # График погрешности математического ожидания для экспоненциального распределения
+    
     axs[0, 1].plot(sample_sizes, exp_errors['mean'], marker='o', label='Mean Error')
     axs[0, 1].set_title('Экспоненциальное распределение - Погрешность мат. ожидания')
     axs[0, 1].set_xlabel('Размер выборки')
     axs[0, 1].set_ylabel('Относительная погрешность (%)')
 
-    # График погрешности дисперсии для экспоненциального распределения
+   
     axs[1, 1].plot(sample_sizes, exp_errors['var'], marker='o', label='Variance Error')
     axs[1, 1].set_title('Экспоненциальное распределение - Погрешность дисперсии')
     axs[1, 1].set_xlabel('Размер выборки')
     axs[1, 1].set_ylabel('Относительная погрешность (%)')
 
-    # График погрешности математического ожидания для нормального распределения
+   
     axs[0, 2].plot(sample_sizes, norm_errors['mean'], marker='o', label='Mean Error')
     axs[0, 2].set_title('Нормальное распределение - Погрешность мат. ожидания')
     axs[0, 2].set_xlabel('Размер выборки')
     axs[0, 2].set_ylabel('Относительная погрешность (%)')
 
-    # График погрешности дисперсии для нормального распределения
+   
     axs[1, 2].plot(sample_sizes, norm_errors['var'], marker='o', label='Variance Error')
     axs[1, 2].set_title('Нормальное распределение - Погрешность дисперсии')
     axs[1, 2].set_xlabel('Размер выборки')
@@ -93,15 +92,15 @@ def plot_error_graphs(uniform_errors, exp_errors, norm_errors, sample_sizes):
     plt.tight_layout()
     plt.show()
 
-# Построение гистограммы и диаграммы накопленных частот
+
 def plot_histogram_and_cdf(sample, title):
-    # Гистограмма
+   
     plt.figure(figsize=(8, 4))
     plt.hist(sample, bins=10, alpha=0.7, edgecolor='black', density=True)
     plt.title(f'Гистограмма {title}')
     plt.show()
 
-    # Диаграмма накопленных частот
+    
     sorted_sample = sorted(sample)
     cumulative_freq = [i / len(sample) for i in range(1, len(sample) + 1)]
 
@@ -125,22 +124,22 @@ def run_simulation(a, b, lam, mu, sigma):
     fig, axs = plt.subplots(len(sample_sizes), 3, figsize=(18, 20))
 
     for idx, N in enumerate(sample_sizes):
-        # Равномерное распределение
+       
         uniform_sample = uniform_distribution(N, a, b)
         uniform_mean, uniform_var = calculate_statistics(uniform_sample)
         uniform_errors['mean'].append(relative_error(uniform_mean, (a + b) / 2))
         uniform_errors['var'].append(relative_error(uniform_var, ((b - a) ** 2) / 12))
 
-        # Оценка количества интервалов для равномерного распределения
+       
         K = round(1 + 3.2 * math.log10(N))
         
         len_q_uni = (max(uniform_sample) - min(uniform_sample)) / K
 
-        # Гистограмма накопленных частот для равномерного распределения
+       
         axs[idx, 0].hist(uniform_sample, bins=N, alpha=0.7, edgecolor='black', density=True)
         axs[idx, 0].set_title(f'Равномерное распределение (N={N})')
 
-        # Накопленные частоты по интервалам
+        
         interval_edges = [min(uniform_sample) + i * len_q_uni for i in range(K + 1)]
         cumulative_freq = [0] * K
         for value in uniform_sample:
@@ -148,28 +147,27 @@ def run_simulation(a, b, lam, mu, sigma):
                 if interval_edges[i] <= value < interval_edges[i + 1]:
                     cumulative_freq[i] += 1
 
-        # Накопление частот
+       
         cumulative_freq = [sum(cumulative_freq[:i + 1]) / N for i in range(K)]
         
         
         cumulative_freq.insert(0,0)
         cumulative_freq[-1]=math.ceil(cumulative_freq[-1])
        
-        # Построение накопленной кривой
+      
         axs[idx, 0].step(interval_edges, cumulative_freq, where='post', color='blue')
 
-        # Экспоненциальное распределение
+     
         exp_sample = exponential_distribution(N, lam)
         
         exp_mean, exp_var = calculate_statistics(exp_sample)
         exp_errors['mean'].append(relative_error(exp_mean, 1 / lam))
         exp_errors['var'].append(relative_error(exp_var, 1 / lam ** 2))
 
-        # Оценка количества интервалов для экспоненциального распределения
+        
         K = round(1 + 3.2 * math.log10(N))
         len_q_exp = (max(exp_sample) - min(exp_sample)) / K
 
-        # Гистограмма накопленных частот для экспоненциального распределения
         axs[idx, 1].hist(exp_sample, bins=N, alpha=0.7, edgecolor='black', density=True)
         axs[idx, 1].set_title(f'Экспоненциальное распределение (N={N})')
 
@@ -209,7 +207,7 @@ def run_simulation(a, b, lam, mu, sigma):
                 if interval_edges[i] <= value < interval_edges[i + 1]:
                     cumulative_freq[i] += 1
 
-        # Накопление частот
+        
         cumulative_freq = [sum(cumulative_freq[:i + 1]) / N for i in range(K)]
         
         
@@ -222,12 +220,12 @@ def run_simulation(a, b, lam, mu, sigma):
     plt.tight_layout()
     plt.show()
 
-    # Построение графиков погрешностей
+   
     plot_error_graphs(uniform_errors, exp_errors, norm_errors, sample_sizes)
 
 
 
-# GUI на tkinter
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
