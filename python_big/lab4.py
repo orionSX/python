@@ -127,6 +127,7 @@ def run_simulation(a, b, lam, mu, sigma):
        
         uniform_sample = uniform_distribution(N, a, b)
         uniform_mean, uniform_var = calculate_statistics(uniform_sample)
+        print(f'Равномерное для N={N} : М = {uniform_mean} , D = {uniform_var} ')
         uniform_errors['mean'].append(relative_error(uniform_mean, (a + b) / 2))
         uniform_errors['var'].append(relative_error(uniform_var, ((b - a) ** 2) / 12))
 
@@ -161,6 +162,7 @@ def run_simulation(a, b, lam, mu, sigma):
         exp_sample = exponential_distribution(N, lam)
         
         exp_mean, exp_var = calculate_statistics(exp_sample)
+        print(f'Экспоненциальное для N={N} : М = {exp_mean} , D = {exp_var} ')
         exp_errors['mean'].append(relative_error(exp_mean, 1 / lam))
         exp_errors['var'].append(relative_error(exp_var, 1 / lam ** 2))
 
@@ -190,6 +192,7 @@ def run_simulation(a, b, lam, mu, sigma):
 
         norm_sample = normal_distribution(N, mu, sigma)
         norm_mean, norm_var = calculate_statistics(norm_sample)
+        print(f'Нормальное для N={N} : М = {norm_mean} , D = {norm_var} ')
         norm_errors['mean'].append(relative_error(norm_mean, mu))
         norm_errors['var'].append(relative_error(norm_var, sigma ** 2))
 
@@ -260,8 +263,8 @@ class App(tk.Tk):
         self.sigma_entry = ttk.Entry(self)
         self.sigma_entry.pack()
 
-        self.run_button = tk.Button(self, text="Запустить моделирование", command=self.run_simulation)
-        self.run_button.pack(pady=20)
+        self.run_button = tk.Button(self, text="Бум", command=self.run_simulation)
+        self.run_button.pack()
 
     def run_simulation(self):
         a = float(self.a_entry.get())
