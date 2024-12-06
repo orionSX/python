@@ -64,7 +64,7 @@ for i in range(num_jobs):
     setup_time = uniform_distribution(num_jobs,setup_time_min,setup_time_max)[np.random.randint(10,400)]
     current_time += setup_time
 
-    process_time = max(0,normal_distribution(num_jobs,process_time_mean, process_time_std)[np.random.randint(10,400)])
+    process_time = normal_distribution(num_jobs,process_time_mean, process_time_std)[np.random.randint(10,400)]
 
  
     while breakdown_index < len(breakdown_times) and breakdown_times[breakdown_index] < current_time + process_time:
@@ -76,7 +76,7 @@ for i in range(num_jobs):
         total_idle_time += breakdown_time - current_time
         current_time = breakdown_time + repair_time
         breakdown_index += 1
-        current_time += normal_distribution(num_jobs,setup_time_min,setup_time_max)[-1]
+        current_time += normal_distribution(num_jobs,setup_time_min,setup_time_max)[np.random.randint(10,400)]
       
 
     job_start_times[i] = current_time - process_time
