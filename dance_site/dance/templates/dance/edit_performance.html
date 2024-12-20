@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{% if performance %}Edit Performance{% else %}Add Performance{% endif %}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="group_id" class="form-label">Dance Group</label>
+        <select class="form-control" id="group_id" name="group_id">
+            {% for group in groups %}
+            <option value="{{ group.id }}" {% if performance and performance.group.id == group.id %}selected{% endif %}>
+                {{ group.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="style_id" class="form-label">Dance Style</label>
+        <select class="form-control" id="style_id" name="style_id">
+            {% for style in styles %}
+            <option value="{{ style.id }}" {% if performance and performance.style.id == style.id %}selected{% endif %}>
+                {{ style.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" class="form-control" id="date" name="date" value="{{ performance.date|date:'Y-m-d' }}">
+    </div>
+    <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" name="location" value="{{ performance.location|default_if_none:'' }}">
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'list_performances' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

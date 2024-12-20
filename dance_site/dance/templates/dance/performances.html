@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Performances</h1>
+<a href="{% url 'add_performance' %}" class="btn btn-primary mb-3">Add Performance</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Group</th>
+            <th>Style</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for performance in performances %}
+        <tr>
+            <td>{{ performance.id }}</td>
+            <td>{{ performance.group.name }}</td>
+            <td>{{ performance.style.name }}</td>
+            <td>{{ performance.date }}</td>
+            <td>{{ performance.location }}</td>
+            <td>
+                <a href="{% url 'edit_performance' performance.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_performance' performance.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

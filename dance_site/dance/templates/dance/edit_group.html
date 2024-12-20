@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{% if group %}Edit Group{% else %}Add Group{% endif %}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ group.name|default_if_none:'' }}">
+    </div>
+    <div class="mb-3">
+        <label for="city" class="form-label">City</label>
+        <input type="text" class="form-control" id="city" name="city" value="{{ group.city|default_if_none:'' }}">
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="{% url 'list_groups' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

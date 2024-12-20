@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Dance Styles</h1>
+<a href="{% url 'add_style' %}" class="btn btn-primary mb-3">Add Style</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for style in styles %}
+        <tr>
+            <td>{{ style.id }}</td>
+            <td>{{ style.name }}</td>
+            <td>
+                <a href="{% url 'edit_style' style.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_style' style.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
